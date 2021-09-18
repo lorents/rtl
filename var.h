@@ -16,7 +16,7 @@
 
 #include <functional>
 #include <memory>
-#include <mutex>
+#include <assert.h>
 
 namespace rtl
 {

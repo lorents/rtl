@@ -1,6 +1,7 @@
 #pragma once
 
 #include "evaluator.h"
+#include "dependency.h"
 
 namespace rtl
 {
