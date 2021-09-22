@@ -2,7 +2,10 @@
 
 #include <string>
 #include <functional>
+
+#ifdef RTL_USE_SOURCE_LOCATION
 #include <source_location>
+#endif
 
 namespace rtl
 {
@@ -11,7 +14,10 @@ namespace rtl
 		void* subject;
 		std::string verb;
 		void* object;
+
+#ifdef RTL_USE_SOURCE_LOCATION
 		std::source_location location;
+#endif
 	};
 
 	class log_consumer
@@ -33,6 +39,7 @@ namespace rtl
 	class log
 	{
 	public:
+#ifdef RTL_USE_SOURCE_LOCATION
 		static void event(void* subject, std::string verb, void* object, const std::source_location location = std::source_location::current());
 
 		static inline void event(void* subject, std::string verb, const std::source_location location = std::source_location::current())
@@ -75,5 +82,50 @@ namespace rtl
 		{
 			event(subject, "invalidate", location);
 		}
+#else
+		static void event(void* subject, std::string verb, void* object);
+
+		static inline void event(void* subject, std::string verb)
+		{
+			event(subject, verb, nullptr);
+		}
+		static inline  void event(std::string verb)
+		{
+			event(nullptr, verb, nullptr);
+		}
+		static inline  void create(void* subject)
+		{
+			event(subject, "create");
+		}
+		static inline  void destroy(void* subject)
+		{
+			event(subject, "destroy");
+		}
+		static inline  void subscribe(void* subject, void* object)
+		{
+			event(subject, "subscribe", object);
+		}
+		static inline  void unsubscribe(void* subject, void* object)
+		{
+			event(subject, "unsubscribe", object);
+		}
+		static inline void populate(void* subject, void* object)
+		{
+			event(subject, "populate", object);
+		}
+		static inline void depopulate(void* subject, void* object)
+		{
+			event(subject, "depopulate", object);
+		}
+		static inline void evaluate(void* subject)
+		{
+			event(subject, "evaluate");
+		}
+		static inline void invalidate(void* subject)
+		{
+			event(subject, "invalidate");
+		}
+
+#endif
 	};
 }

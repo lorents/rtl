@@ -30,8 +30,13 @@ namespace rtl
 
 		var(): var(T()) {}
 
+#ifdef RTL_USE_SOURCE_LOCATION
 		var(const T& value, const std::source_location location = std::source_location::current()): dependency(location), evaluator(std::make_unique<constant<T>>(dependency, value)) {}
 		var(std::function<T()> evaluate, const std::source_location location = std::source_location::current()): dependency(location), evaluator(std::make_unique<delegate<T>>(dependency, evaluate)) {}
+#else
+		var(const T& value): dependency(), evaluator(std::make_unique<constant<T>>(dependency, value)) {}
+		var(std::function<T()> evaluate): dependency(), evaluator(std::make_unique<delegate<T>>(dependency, evaluate)) {}
+#endif
 
 		const T& operator=(const T& new_value)
 		{
@@ -139,6 +144,7 @@ namespace rtl
 			return evaluator->value();
 		}
 
+#ifdef RTL_USE_SOURCE_LOCATION
 		void subscribe(invalidatable* subscriber, const std::source_location location = std::source_location::current())
 		{
 			dependency.subscribe(subscriber, location);
@@ -148,6 +154,17 @@ namespace rtl
 		{
 			return dependency.unsubscribe(subscriber, location);
 		}
+#else
+		void subscribe(invalidatable* subscriber)
+		{
+			dependency.subscribe(subscriber);
+		}
+
+		bool unsubscribe(invalidatable* subscriber)
+		{
+			return dependency.unsubscribe(subscriber);
+		}
+#endif
 	};
 }
 

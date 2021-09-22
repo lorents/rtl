@@ -11,9 +11,17 @@ using namespace rtl;
 thread_local unsigned int dependency::current_flag = 1u;
 
 
-dependency::dependency(const std::source_location location)
+dependency::dependency(
+#ifdef RTL_USE_SOURCE_LOCATION
+	const std::source_location location
+#endif
+)
 {
-	log::create(this, location);
+	log::create(this
+#ifdef RTL_USE_SOURCE_LOCATION
+		, location
+#endif
+	);
 }
 
 dependency::~dependency()
@@ -58,16 +66,34 @@ void dependency::clear_marks()
 	visited &= ~current_flag;
 }
 
-void dependency::subscribe(invalidatable* subscriber, const std::source_location location)
+void dependency::subscribe(
+	invalidatable* subscriber
+#ifdef RTL_USE_SOURCE_LOCATION
+	, const std::source_location location
+#endif
+)
 {
-	log::subscribe(this, subscriber->log_id(), location);
+	log::subscribe(this, subscriber->log_id()
+#ifdef RTL_USE_SOURCE_LOCATION
+		, location
+#endif
+	);
 	assert(std::find(subscribers.begin(), subscribers.end(), subscriber) == subscribers.end());
 	subscribers.push_back(subscriber);
 }
 
-bool dependency::unsubscribe(invalidatable* subscriber, const std::source_location location)
+bool dependency::unsubscribe(
+		invalidatable* subscriber
+#ifdef RTL_USE_SOURCE_LOCATION
+		, const std::source_location location
+#endif
+)
 {
-	log::unsubscribe(this, subscriber->log_id(), location);
+	log::unsubscribe(this, subscriber->log_id()
+#ifdef RTL_USE_SOURCE_LOCATION
+		, location
+#endif
+	);
 	auto it = std::find(subscribers.begin(), subscribers.end(), subscriber);
 	if (it == subscribers.end())
 	{

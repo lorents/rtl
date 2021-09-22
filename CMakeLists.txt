@@ -2,7 +2,7 @@
 
 project ("rtl")
 
-string(APPEND CMAKE_CXX_FLAGS " /std:c++20")
+# string(APPEND CMAKE_CXX_FLAGS " /std:c++20")
 
 add_library (
 	rtl 

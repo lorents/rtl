@@ -3,7 +3,10 @@
 #include "invalidatable.h"
 
 #include <vector>
+
+#ifdef RTL_USE_SOURCE_LOCATION
 #include <source_location>
+#endif
 
 namespace rtl
 {
@@ -22,7 +25,11 @@ namespace rtl
 	public:
 		dependency(const dependency&) = delete;
 
-		dependency(const std::source_location location = std::source_location::current());
+		dependency(
+#ifdef RTL_USE_SOURCE_LOCATION
+			const std::source_location location = std::source_location::current()
+#endif
+		);
 		~dependency();
 
 		static void push_marks();
@@ -36,8 +43,18 @@ namespace rtl
 
 		void clear_marks();
 
-		void subscribe(invalidatable* subscriber, const std::source_location location = std::source_location::current());
-		bool unsubscribe(invalidatable* subscriber, const std::source_location location = std::source_location::current());
+		void subscribe(
+			invalidatable* subscriber
+#ifdef RTL_USE_SOURCE_LOCATION
+			, const std::source_location location = std::source_location::current()
+#endif
+		);
+		bool unsubscribe(
+			invalidatable* subscriber
+#ifdef RTL_USE_SOURCE_LOCATION
+			, const std::source_location location = std::source_location::current()
+#endif
+		);
 
 		void invalidate() override;
 	};

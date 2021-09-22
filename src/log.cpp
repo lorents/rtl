@@ -1,6 +1,8 @@
 #include <rtl/log.h>
 
+#ifdef RTL_USE_SOURCE_LOCATION
 #include <source_location>
+#endif
 
 using namespace rtl;
 
@@ -42,6 +44,7 @@ log_consumer::~log_consumer()
 	}
 }
 
+#ifdef RTL_USE_SOURCE_LOCATION
 void log::event(void* subject, std::string verb, void* object, const std::source_location location)
 {
 	for (auto it = log_consumer::first_consumer; it != nullptr; it = it->next_consumer)
@@ -49,3 +52,12 @@ void log::event(void* subject, std::string verb, void* object, const std::source
 		it->consume({ subject, verb, object, location });
 	}
 }
+#else
+void log::event(void* subject, std::string verb, void* object)
+{
+	for (auto it = log_consumer::first_consumer; it != nullptr; it = it->next_consumer)
+	{
+		it->consume({ subject, verb, object });
+	}
+}
+#endif
