@@ -19,6 +19,7 @@ namespace rtl
 
 		std::vector<invalidatable*> subscribers;
 		int invalidating_index = 0;
+		int next_invalidating_index = 0;
 
 		thread_local static unsigned int current_flag;
 

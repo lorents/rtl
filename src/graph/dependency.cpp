@@ -103,7 +103,7 @@ bool dependency::unsubscribe(
 	bool offsets_iteration = it <= subscribers.begin() + invalidating_index;
 	if (offsets_iteration)
 	{
-		invalidating_index--;
+		next_invalidating_index = invalidating_index;
 	}
 
 	subscribers.erase(it);
@@ -112,8 +112,9 @@ bool dependency::unsubscribe(
 
 void dependency::invalidate()
 {
-	for (invalidating_index = 0; invalidating_index < subscribers.size(); ++invalidating_index)
+	for (invalidating_index = 0; invalidating_index < subscribers.size(); invalidating_index = next_invalidating_index)
 	{
-		subscribers[invalidating_index]->invalidate();
+		next_invalidating_index = invalidating_index + 1;
+		subscribers[invalidating_index]->invalidate(); // unsubscribe may alter next_invalidating_index
 	}
 }
