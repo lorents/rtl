@@ -3,9 +3,9 @@
 #include "graph/dependency.h"
 #include "graph/dependency_visitor.h"
 
-#include "var/constant.h"
-#include "var/animated.h"
-#include "var/delegate.h"
+#include "evaluators/constant.h"
+#include "evaluators/animated.h"
+#include "evaluators/delegate.h"
 
 #include "tween.h"
 #include "easing.h"

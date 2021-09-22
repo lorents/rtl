@@ -7,7 +7,8 @@
 using namespace rtl;
 
 static_animator::static_animator(std::function<void()> handler):
-	static_animator(*clock::current_clock, std::move(handler)) {}
+	static_animator(*clock::current_clock, std::move(handler)) 
+{}
 
 static_animator::static_animator(rtl::clock& clock, std::function<void()> handler):
 	clock(clock),
@@ -66,7 +67,9 @@ void static_animator::validate()
 	}
 }
 
-animator::animator(std::function<void()> handler) : static_animator(std::move(handler)) {}
+animator::animator(std::function<void()> handler): 
+	animator(*clock::current_clock, std::move(handler)) 
+{}
 
 animator::animator(rtl::clock& clock, std::function<void()> handler): 
 	static_animator(clock, [this, handler]()
