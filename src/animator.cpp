@@ -1,6 +1,6 @@
 #include <rtl/animator.h>
 
-#include <rtl/graph/dependency_visitor.h>
+#include <rtl/graph/visitor.h>
 
 #include <assert.h>
 
@@ -74,7 +74,7 @@ animator::animator(std::function<void()> handler):
 animator::animator(rtl::clock& clock, std::function<void()> handler): 
 	static_animator(clock, [this, handler]()
 	{
-		dependency_visitor v(&dependant);
+		visitor v(&dependant);
 		handler();
 	})
 {}

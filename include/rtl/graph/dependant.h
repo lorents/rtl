@@ -15,6 +15,7 @@ namespace rtl
     
     public:
 		dependant(const dependant&) = delete;
+        
 		dependant(invalidatable* subscriber);
         ~dependant();
 

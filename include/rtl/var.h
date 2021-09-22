@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graph/dependency.h"
-#include "graph/dependency_visitor.h"
+#include "graph/visitor.h"
 
 #include "evaluators/constant.h"
 #include "evaluators/animated.h"
@@ -135,7 +135,7 @@ namespace rtl
 
 		const T& operator()() const
 		{
-			dependency_visitor::visit(const_cast<rtl::dependency*>(&dependency));
+			visitor::visit(const_cast<rtl::dependency*>(&dependency));
 			return evaluator->value();
 		}
 

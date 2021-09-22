@@ -9,7 +9,7 @@ add_library (
 	
 	"src/graph/dependant.cpp"
 	"src/graph/dependency.cpp"
-	"src/graph/dependency_visitor.cpp"
+	"src/graph/visitor.cpp"
 	"src/log.cpp"
 
 	"src/animator.cpp"

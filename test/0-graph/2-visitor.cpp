@@ -1,4 +1,4 @@
-#include <rtl/graph/dependency_visitor.h>
+#include <rtl/graph/visitor.h>
 #include <rtl/graph/dependant.h>
 #include <rtl/graph/dependency.h>
 
@@ -23,9 +23,9 @@ namespace
 			dependant dependant(&inv);
 
 			{
-				dependency_visitor v(&dependant);
-				dependency_visitor::visit(&dependency1);
-				dependency_visitor::visit(&dependency2);
+				visitor v(&dependant);
+				visitor::visit(&dependency1);
+				visitor::visit(&dependency2);
 			}
 
 			counter = 1;
@@ -37,9 +37,9 @@ namespace
 			assert(counter == 0);
 
 			{
-				dependency_visitor v(&dependant);
-				dependency_visitor::visit(&dependency2);
-				dependency_visitor::visit(&dependency3);
+				visitor v(&dependant);
+				visitor::visit(&dependency2);
+				visitor::visit(&dependency3);
 			}
 
 			counter = 0;

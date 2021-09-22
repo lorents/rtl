@@ -4,7 +4,7 @@
 
 #include <rtl/graph/invalidatable.h>
 #include <rtl/graph/dependant.h>
-#include <rtl/graph/dependency_visitor.h>
+#include <rtl/graph/visitor.h>
 
 namespace rtl
 {
@@ -80,7 +80,7 @@ namespace rtl
 			if (valid) { return; }
 			valid = true;
 
-			dependency_visitor v(&dependant);
+			visitor v(&dependant);
 			current_value = evaluate();
 		}
 	};

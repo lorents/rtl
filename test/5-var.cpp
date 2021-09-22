@@ -1,6 +1,6 @@
 #include <rtl/var.h>
 
-#include "../test.h"
+#include "test.h"
 
 using namespace rtl;
 
