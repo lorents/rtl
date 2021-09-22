@@ -1,6 +1,6 @@
 #pragma once
 
-namespace rtl::easing
+namespace rtl { namespace easing
 {
 	typedef	float ( *function )( float );
 
@@ -37,4 +37,4 @@ namespace rtl::easing
 	extern float bounce_in( float t );
 	extern float bounce_out( float t );
 	extern float bounce_in_out( float t );
-}
+} }

@@ -10,7 +10,7 @@ namespace
 	constexpr float	cTwoPI = cPI * 2.0f;
 }
 
-namespace rtl::easing
+namespace rtl { namespace easing
 {
 	function default_easing = &linear;
 
@@ -295,4 +295,4 @@ namespace rtl::easing
 		return ( bounce_out(( t * 2.0f ) - 1.0f ) * 0.5f ) + 0.5f;
 	}
 
-}
+}}
