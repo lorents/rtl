@@ -26,36 +26,9 @@ bar = 1.0f;
 printf("foobar = %f\n", foobar());
 ```
 
-**Reacting to value changes**
+**Simple reaction to value changes**
 
-Implementing `rtl::invalidatable`
-
-```cpp
-#include <rtl/invalidatable.h>
-...
-
-class custom_invalidatable : public rtl::invalidatable
-{
-public:
-	void invalidate() override 
-	{
-		printf("invalidated!\n");
-	}
-};
-
-custom_invalidatable my_invalidatable;
-
-foo.subsribe(&my_invalidatable);
-
-foo = 22.0f; // prints "invalidated!"
-foo = 33.0f; // prints "invalidated!" again
-
-foo.unsubscribe(&my_invalidatable);
-
-foo = 44.0f; // prints nothing
-```
-
-Using `rtl::invalidator<T>`
+Use `rtl::invalidator<T>`
 
 ```cpp
 #include <rtl/invalidator.h>
