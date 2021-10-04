@@ -1,4 +1,5 @@
 #include <rtl/clock.h>
+#include <rtl/graph/visitor.h>
 
 #include <assert.h>
 
@@ -38,6 +39,13 @@ namespace rtl
 	double clock::now() const
 	{
 		assert(is_adjusted());
+		return current_time;
+	}
+
+	double clock::time() const
+	{
+		assert(is_adjusted());
+		rtl::visitor::visit( &const_cast<rtl::dependency&>(dependency) );
 		return current_time;
 	}
 

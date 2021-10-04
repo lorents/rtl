@@ -26,6 +26,7 @@ namespace rtl
 		void adjust(double new_time);
 
 		double now() const;
+		double time() const;
 		double interval() const;
 
 		bool is_adjusted() const;
