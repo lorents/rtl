@@ -89,14 +89,14 @@ Again note that `rtl::clock::frame_clock.adjust()` must have been called at leas
 
 ## Extending RTL
 
-While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator`, RTL can be extended at a lower level through the `rtl::dependency`, `rtl::dependant` and `rtl::dependency_visitor` classes 
+While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator`, RTL can be extended at a lower level through the _graph_ API.
 
 **Adding new value producers**
 
 0. Include relevant headers
 	```cpp
-	#include <rtl/dependency.h>
-	#include <rtl/dependency_visitor.h>
+	#include <rtl/graph/dependency.h>
+	#include <rtl/graph/visitor.h>
 	```
 
 1. Make an `rtl::dependency`
@@ -104,9 +104,9 @@ While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator
 	dependency my_dependency;
 	```
 
-2. When evaluated, visit current `rtl::dependency_visitor`
+2. When evaluated, visit current `rtl::visitor`
 	```cpp
-	dependency_visitor::visit(&my_dependency);
+	visitor::visit(&my_dependency);
 	```
 
 3. When changed, invalidate the `rtl::dependency`
@@ -118,13 +118,14 @@ While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator
 
 0. Include relevant headers
 	```cpp
-	#include <rtl/dependant.h>
-	#include <rtl/dependency_visitor.h>
-	#include <rtl/invalidator.h>
+	#include <rtl/graph/dependant.h>
+	#include <rtl/graph/visitor.h>
 	```
 
 1. Implement `rtl::invalidatable`, e.g. using `rtl::invalidator`
 	```cpp
+	#include <rtl/invalidator.h>
+
 	invalidator my_invalidator = []()
 	{
 		// one of the dependencies was invalidated
@@ -137,10 +138,10 @@ While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator
 	dependant my_dependant(&my_invalidator);
 	```
 
-3. Guard any calls to reactive functions with an instance of  `rtl::dependency_visitor`
+3. Guard any calls to reactive functions with an instance of  `rtl::visitor`
 	```cpp
 	{
-		dependency_visitor my_visitor(&my_dependant);
+		visitor my_visitor(&my_dependant);
 
 		// evaluate dependencies here
 		...
@@ -149,7 +150,7 @@ While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator
 
 ## Limitations
 
-Inteded for single-threaded use. Two concurrent evaluations will break unless all vars involved use the same mutex.
+Inteded for single-threaded use
 
 ## Licence 
 
