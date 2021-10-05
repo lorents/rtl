@@ -26,33 +26,6 @@ bar = 1.0f;
 printf("foobar = %f\n", foobar());
 ```
 
-**Simple reaction to value changes**
-
-Use `rtl::invalidator<T>`
-
-```cpp
-#include <rtl/invalidator.h>
-...
-
-rtl::invalidator foo_printer = [&]()
-{
-	printf("foo invalidated\n");
-};
-rtl::invalidator bar_printer = [&]()
-{
-	printf("bar invalidated\n");
-};
-rtl::invalidator foobar_printer = [&]()
-{
-	printf("foobar invaliated\n");
-};
-
-foo = 3.0f; // prints "foo invalidated", "foobar invalidated"
-bar = 2.0f; // prints "bar invalidated", "foobar invalidated"
-```
-
-"That's cool bro, but i want to change both foo and bar at the same time and reevaluate foobar just once" - What a timely question!
-
 ### Animation and time
 
 RTL uses the `rtl::clock` class as a source of time, and if no instance is explicitly provided for `rtl::var` and `rtl::animator` they will use whatever the thread static `rtl::clock::current_clock` points to. 
@@ -66,11 +39,16 @@ This clock is by default pointing to the thread static `rtl::clock::default_cloc
 rtl:clock::default_clock.adjust(get_time_in_seconds()); 
 ```
 
-**Reacting to value changes once per frame**
+**Reacting to value changes**
 
-With `rtl::clock` set up, you can now have your foo and bar at the same time by using an `rtl::animator` instead of `rtl::invalidator`
+With `rtl::clock` set up, you can now use `rtl::animator` to react to changes. 
+
+Even if multiple dependencies change the animator callback is run at max once per frame, avoiding wrong intermediate states. 
 
 ```cpp
+#include <rtl/animator.h>
+...
+
 rtl::animator foo_printer = [&]()
 {
 	printf("foo = %f\n", foo());
@@ -88,13 +66,12 @@ foo = 3.0f; // prints nothing yet
 bar = 2.0f; // prints nothing yet
 
 // later..
-rtl:clock::default_clock.adjust(get_time_in_seconds()); // prints foo, bar, foobar
+rtl:clock::default_clock.adjust(get_time_in_seconds()); // prints foo = 3, bar = 2, foobar = 5
 
-bar = 3.0f; // nothing again
+bar = 3.0f; // prints nothing again
 
-rtl:clock::default_clock.adjust(get_time_in_seconds()); // prints bar, foobar
+rtl:clock::default_clock.adjust(get_time_in_seconds()); // prints bar = 3, foobar = 6
 ```
-
 
 **Triggering animations**
 
@@ -108,9 +85,7 @@ foo.animate(1.0f, 0.5, &rtl::easing::linear, [&]()
 });
 ```
 
-Note that `rtl::clock::frame_clock.adjust()` must have been called at least once before triggering any animations.
-
-
+Again note that `rtl::clock::frame_clock.adjust()` must have been called at least once before triggering any animations.
 
 ## Extending RTL
 
