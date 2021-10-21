@@ -100,7 +100,7 @@ bool dependency::unsubscribe(
 		return false;
 	}
 
-	bool offsets_iteration = it <= subscribers.begin() + invalidating_index;
+	bool offsets_iteration = (it - subscribers.begin()) <= invalidating_index;
 	if (offsets_iteration)
 	{
 		next_invalidating_index = invalidating_index;
