@@ -93,10 +93,9 @@ While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator
 
 **Adding new value producers**
 
-0. Include relevant headers
+0. Include relevant header
 	```cpp
 	#include <rtl/graph/dependency.h>
-	#include <rtl/graph/visitor.h>
 	```
 
 1. Make an `rtl::dependency`
@@ -104,12 +103,12 @@ While it is often easier to just use an internal `rtl::var<T>` or `rtl::animator
 	dependency my_dependency;
 	```
 
-2. When evaluated, visit current `rtl::visitor`
+2. When evaluated, notify the current visitor
 	```cpp
-	visitor::visit(&my_dependency);
+	my_dependency.visit();
 	```
 
-3. When changed, invalidate the `rtl::dependency`
+3. When changed, invalidate dependants
 	```cpp
 	my_dependency.invalidate();
 	```

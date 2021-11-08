@@ -58,5 +58,7 @@ namespace rtl
 		);
 
 		void invalidate() override;
+
+		void visit() const;
 	};
 }

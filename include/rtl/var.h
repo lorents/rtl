@@ -135,7 +135,7 @@ namespace rtl
 
 		const T& operator()() const
 		{
-			visitor::visit(const_cast<rtl::dependency*>(&dependency));
+			dependency.visit();
 			return evaluator->value();
 		}
 

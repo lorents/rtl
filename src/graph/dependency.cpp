@@ -1,4 +1,5 @@
 #include <rtl/graph/dependency.h>
+#include <rtl/graph/visitor.h>
 
 #include <rtl/graph/invalidatable.h>
 
@@ -117,4 +118,9 @@ void dependency::invalidate()
 		next_invalidating_index = invalidating_index + 1;
 		subscribers[invalidating_index]->invalidate(); // unsubscribe may alter next_invalidating_index
 	}
+}
+
+void dependency::visit() const
+{
+	visitor::visit(const_cast<rtl::dependency*>(this));
 }

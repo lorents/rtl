@@ -45,7 +45,7 @@ namespace rtl
 	double clock::time() const
 	{
 		assert(is_adjusted());
-		rtl::visitor::visit( &const_cast<rtl::dependency&>(dependency) );
+		dependency.visit();
 		return current_time;
 	}
 
