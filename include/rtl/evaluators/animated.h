@@ -142,8 +142,8 @@ namespace rtl
 			{
 				current_value = target_value;
 				idle = true;
-				if(tween.completed) tween.completed();
-				tween.completed = nullptr;
+				auto continuation = std::move(tween.completed);
+				if(continuation) continuation();
 			}
 			else
 			{
