@@ -92,7 +92,7 @@ namespace rtl
 
 		void animate(rtl::clock& clock, const T& target, tween tween)
 		{
-			if (tween.duration == 0.0 && tween.delay == 0.0)
+			if (tween.duration == 0.0 && tween.delay == 0.0 && !tween.completed)
 			{
 				*this = target;
 				return;
