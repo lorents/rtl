@@ -3,7 +3,8 @@
 #include <rtl/clock.h>
 #include <rtl/log.h>
 
-#include <assert.h>
+#include <cassert>
+#include <cmath>
 
 using namespace rtl;
 
@@ -21,7 +22,7 @@ timer::timer(rtl::clock& clock, double timeout, std::function<void()> listener) 
 
 timer::~timer()
 {
-	bool is_subscribed = !isnan(next_time);
+	bool is_subscribed = !std::isnan(next_time);
 	if (is_subscribed)
 	{
 		bool did_unsubscribe = clock.unsubscribe(this);
@@ -32,7 +33,7 @@ timer::~timer()
 
 void timer::reset()
 {
-	bool is_subscribed = !isnan(next_time);
+	bool is_subscribed = !std::isnan(next_time);
 	next_time = clock.now() + timeout;
 	if (!is_subscribed)
 	{

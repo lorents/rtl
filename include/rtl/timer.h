@@ -12,7 +12,7 @@ namespace rtl
 	{
 		rtl::clock& clock;
 		double timeout;
-		double next_time = NAN;
+		double next_time = std::numeric_limits<double>::quiet_NaN();
 		std::function<void()> listener;
 
 	public:
