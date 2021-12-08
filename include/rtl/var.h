@@ -120,6 +120,7 @@ namespace rtl
 
 		const T& target() const
 		{
+			dependency.visit();
 			return evaluator->target();
 		}
 
