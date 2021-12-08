@@ -81,7 +81,7 @@ namespace rtl
 			valid = true;
 
 			visitor v(&dependant);
-			current_value = evaluate();
+			if (evaluate) current_value = evaluate();
 		}
 	};
 }
