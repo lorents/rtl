@@ -22,6 +22,7 @@ namespace rtl
 
 		invalidatable& dependency;
 		clock& clock;
+		bool is_subscribed_to_clock;
 
 	public:
 		animated( const animated& ) = delete;
@@ -46,7 +47,12 @@ namespace rtl
 			if (tween.delay != 0.0)
 			{
 				idle = true;
+				is_subscribed_to_clock = true;
 				clock.subscribe(this);
+			}
+			else
+			{
+				is_subscribed_to_clock = false;
 			}
 
 			dependency.invalidate();
@@ -54,11 +60,10 @@ namespace rtl
 
 		~animated()
 		{
-			bool is_subscribed_to_clock = tween.delay != 0.0;
-
 			if (is_subscribed_to_clock)
 			{
-				clock.unsubscribe(this);
+				bool did_unsubscribe = clock.unsubscribe(this);
+				assert(did_unsubscribe);
 			}
 		}
 
@@ -68,8 +73,6 @@ namespace rtl
 
 		bool try_set(const T& value) override
 		{
-			bool is_subscribed_to_clock = tween.delay != 0.0;
-
 			if( !is_subscribed_to_clock && idle && current_value == value )
 			{
 				return true;
@@ -82,7 +85,9 @@ namespace rtl
 
 			if (is_subscribed_to_clock)
 			{
-				clock.unsubscribe(this);
+				bool did_unsubscribe = clock.unsubscribe(this);
+				assert(did_unsubscribe);
+				is_subscribed_to_clock = false;
 			}
 
 			dependency.invalidate();
@@ -91,7 +96,6 @@ namespace rtl
 
 		bool try_animate(const T& target, const rtl::tween& new_tween) override
 		{
-			bool is_subscribed_to_clock = tween.delay != 0.0;
 			bool should_subscribe_to_clock = new_tween.delay != 0.0;
 
 			tween = new_tween;
@@ -104,10 +108,13 @@ namespace rtl
 
 			if (is_subscribed_to_clock && !should_subscribe_to_clock)
 			{
-				clock.unsubscribe(this);
+				bool did_unsubscribe = clock.unsubscribe(this);
+				assert(did_unsubscribe);
+				is_subscribed_to_clock = false;
 			}
 			else if(!is_subscribed_to_clock && should_subscribe_to_clock)
 			{
+				is_subscribed_to_clock = true;
 				clock.subscribe(this);
 			}
 
@@ -125,9 +132,19 @@ namespace rtl
 	private:
 		void invalidate() override
 		{
-			if (clock.now() >= started )
+			if (clock.now() - started > tween.duration)
 			{
-				clock.unsubscribe(this);
+				bool did_unsubscribe = clock.unsubscribe(this);
+				assert(did_unsubscribe);
+				is_subscribed_to_clock = false;
+				auto continuation = std::move(tween.completed);
+				if(continuation) continuation();
+			}
+			else if (clock.now() >= started )
+			{
+				bool did_unsubscribe = clock.unsubscribe(this);
+				assert(did_unsubscribe);
+				is_subscribed_to_clock = false;
 				tween.delay = 0.0;
 				idle = false;
 				dependency.invalidate();
@@ -142,8 +159,8 @@ namespace rtl
 			{
 				current_value = target_value;
 				idle = true;
-				auto continuation = std::move(tween.completed);
-				if(continuation) continuation();
+				is_subscribed_to_clock = true;
+				clock.subscribe(this);
 			}
 			else
 			{
