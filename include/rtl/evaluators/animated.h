@@ -68,7 +68,7 @@ namespace rtl
 		}
 
 		const T& value() override { validate(); return current_value; }
-		const T& target() override { return target_value; }
+		const T& target() override { return idle ? current_value : target_value; }
 		bool is_valid() override { return idle; }
 
 		bool try_set(const T& value) override
