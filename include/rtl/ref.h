@@ -92,7 +92,7 @@ namespace rtl
 				reinterpret_cast<function_pair*>(var_or_function_pair)->setter(target, tween);
 		}
 
-		operator const T& () const
+		operator T () const
 		{
 			return operator()();
 		}
@@ -103,5 +103,6 @@ namespace rtl
 				? reinterpret_cast<var<T>*>(var_or_function_pair)->operator()()
 				: reinterpret_cast<function_pair*>(var_or_function_pair)->getter();
 		}
+
 	};
 }
