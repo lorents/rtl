@@ -74,7 +74,17 @@ animator::animator(std::function<void()> handler):
 animator::animator(rtl::clock& clock, std::function<void()> handler): 
 	static_animator(clock, [this, handler]()
 	{
-		visitor v(&dependant);
+		visitor v( &dependant );
+		active_visitor = &v;
 		handler();
+		active_visitor = nullptr;
 	})
 {}
+
+animator::~animator()
+{
+	if (active_visitor)
+	{
+		active_visitor->cancel();
+	}
+}
