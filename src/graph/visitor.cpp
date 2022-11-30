@@ -12,16 +12,23 @@ thread_local dependant* visitor::current_visitor = nullptr;
 visitor::visitor(dependant* visitor) :
 	previous_visitor(current_visitor)
 {
-	assert(visitor);
 	current_visitor = visitor;
-	current_visitor->prepare_mark_and_sweep();
-	assert(current_visitor);
+	if (current_visitor)
+		current_visitor->prepare_mark_and_sweep();
 }
 
 visitor::~visitor()
 {
-	current_visitor->sweep_and_unsubscribe();
+	if (current_visitor && !canceled)
+	{
+		current_visitor->sweep_and_unsubscribe();
+	}
 	current_visitor = previous_visitor;
+}
+
+void visitor::cancel()
+{
+	canceled = true;
 }
 
 void visitor::visit(dependency* visited)
