@@ -1,11 +1,11 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-project ("test")
+project ("tezt")
 
 # string(APPEND CMAKE_CXX_FLAGS " /std:c++20")
 
 add_executable(
-	test
+	tezt
 	
 	"0-graph/0-dependency.cpp" 
 	"0-graph/1-dependant.cpp" 
@@ -21,5 +21,5 @@ add_executable(
 	"main.cpp"  
  )
 
-target_link_libraries(test rtl)
+target_link_libraries(tezt rtl)
 
