@@ -33,8 +33,6 @@ namespace rtl
 
 	protected:
 		dependant dependant;
-		
-		visitor* active_visitor;
 
 		virtual void invalidate() override;
 		virtual void validate();
@@ -50,5 +48,8 @@ namespace rtl
 		animator(rtl::clock& clock, std::function<void()> handler);
 
 		~animator();
+
+	protected:
+		visitor* active_visitor = nullptr;
 	};
 }
