@@ -19,9 +19,16 @@ visitor::visitor(dependant* visitor) :
 
 visitor::~visitor()
 {
-	if (current_visitor && !canceled)
+	if (current_visitor)
 	{
-		current_visitor->sweep_and_unsubscribe();
+		if (canceled)
+		{
+			dependency::pop_marks();
+		}
+		else
+		{
+			current_visitor->sweep_and_unsubscribe();
+		}
 	}
 	current_visitor = previous_visitor;
 }
