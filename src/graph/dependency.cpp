@@ -32,9 +32,10 @@ dependency::~dependency()
 	assert(subscribers.size() == 0);
 }
 
-void dependency::push_marks()
+unsigned int dependency::push_marks()
 {
 	current_flag <<= 1u;
+	return current_flag;
 }
 void dependency::pop_marks()
 {
@@ -63,9 +64,15 @@ bool dependency::is_marked_as_visited() const
 
 void dependency::clear_marks()
 {
-	subscribed &= ~current_flag;
-	visited &= ~current_flag;
+	clear_marks(current_flag);
 }
+
+void dependency::clear_marks(unsigned int flag)
+{
+	subscribed &= ~flag;
+	visited &= ~flag;
+}
+
 
 void dependency::subscribe(
 	invalidatable* subscriber

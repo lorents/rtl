@@ -76,8 +76,11 @@ animator::animator(rtl::clock& clock, std::function<void()> handler):
 	{
 		visitor v( &dependant );
 		active_visitor = &v;
-		handler();
-		active_visitor = nullptr;
+		handler(); // this might delete us
+		if (!v.was_canceled())
+		{
+			active_visitor = nullptr;
+		}
 	})
 {}
 

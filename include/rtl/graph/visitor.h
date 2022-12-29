@@ -9,6 +9,8 @@ namespace rtl
 	{
 		thread_local static dependant* current_visitor;
 
+		unsigned int our_flag;
+		dependant* our_visitor;
 		dependant* previous_visitor;
 
 		bool canceled = false;
@@ -19,6 +21,8 @@ namespace rtl
 		~visitor();
 
 		void cancel();
+		
+		bool was_canceled() const;
 
 		static void visit(dependency* visited);
 	};

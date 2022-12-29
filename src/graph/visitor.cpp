@@ -10,11 +10,14 @@ using namespace rtl;
 thread_local dependant* visitor::current_visitor = nullptr;
 
 visitor::visitor(dependant* visitor) :
+	our_visitor(visitor),
 	previous_visitor(current_visitor)
 {
-	current_visitor = visitor;
-	if (current_visitor)
-		current_visitor->prepare_mark_and_sweep();
+	current_visitor = our_visitor;
+	if (our_visitor)
+	{
+		our_flag = our_visitor->prepare_mark_and_sweep();
+	}
 }
 
 visitor::~visitor()
@@ -36,6 +39,15 @@ visitor::~visitor()
 void visitor::cancel()
 {
 	canceled = true;
+	if (our_visitor)
+	{
+		our_visitor->unsubscribe_all(our_flag);
+	}
+}
+
+bool visitor::was_canceled() const
+{
+	return canceled;
 }
 
 void visitor::visit(dependency* visited)

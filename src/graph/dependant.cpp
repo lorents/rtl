@@ -18,14 +18,16 @@ dependant::~dependant()
 	}
 }
 
-void dependant::prepare_mark_and_sweep()
+unsigned int dependant::prepare_mark_and_sweep()
 {
-	dependency::push_marks();
+	auto flag = dependency::push_marks();
 
 	for (dependency* dep : dependencies)
 	{
 		dep->mark_as_subscribed();
 	}
+	
+	return flag;
 }
 
 void dependant::mark_and_subscribe(dependency* dep)
@@ -61,4 +63,15 @@ void dependant::sweep_and_unsubscribe()
 	dependencies.resize(i);
 
 	dependency::pop_marks();
+}
+
+void dependant::unsubscribe_all(unsigned int flag)
+{
+	int i = 0;
+	for (dependency* dep : dependencies)
+	{
+		bool did_unsubscribe = dep->unsubscribe(subscriber);
+		dep->clear_marks( flag );
+	}
+	dependencies.resize(0);
 }

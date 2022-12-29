@@ -33,7 +33,7 @@ namespace rtl
 		);
 		~dependency();
 
-		static void push_marks();
+		static unsigned int push_marks();
 		static void pop_marks();
 
 		void mark_as_subscribed();
@@ -43,6 +43,7 @@ namespace rtl
 		bool is_marked_as_visited() const;
 
 		void clear_marks();
+		void clear_marks(unsigned int flag);
 
 		void subscribe(
 			invalidatable* subscriber
