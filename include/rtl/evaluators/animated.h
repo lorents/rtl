@@ -7,6 +7,8 @@
 #include <rtl/clock.h>
 #include <rtl/tween.h>
 
+#include <cassert>
+
 namespace rtl
 {
 	template<typename T>
