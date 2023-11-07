@@ -2,66 +2,41 @@
 
 #include "../test.h"
 
-using namespace rtl;
-
-namespace
+void rtl::tests::dependency_test()
 {
-	class test : public rtl::test
+	dependency dependency;
+
+	dependency::push_marks();
 	{
-		void run() override
+		dependency.mark_as_subscribed();
+
+		dependency::push_marks();
 		{
-			dependency dependency;
+			dependency.mark_as_visited();
 
 			dependency::push_marks();
 			{
+				dependency.mark_as_visited();
 				dependency.mark_as_subscribed();
 
-				dependency::push_marks();
-				{
-					dependency.mark_as_visited();
+				dependency::pop_marks();
+			}
 
-					dependency::push_marks();
-					{
-						dependency.mark_as_visited();
-						dependency.mark_as_subscribed();
+			dependency::pop_marks();
+		}
 
-						dependency::pop_marks();
-					}
+		assert(dependency.is_marked_as_subscribed());
+		assert(!dependency.is_marked_as_visited());
 
-					dependency::pop_marks();
-				}
+		dependency::push_marks();
+		{
+			assert(!dependency.is_marked_as_subscribed());
+			assert(dependency.is_marked_as_visited());
 
+			dependency::push_marks();
+			{
 				assert(dependency.is_marked_as_subscribed());
-				assert(!dependency.is_marked_as_visited());
-
-				dependency::push_marks();
-				{
-					assert(!dependency.is_marked_as_subscribed());
-					assert(dependency.is_marked_as_visited());
-
-					dependency::push_marks();
-					{
-						assert(dependency.is_marked_as_subscribed());
-						assert(dependency.is_marked_as_visited());
-
-						dependency.clear_marks();
-						assert(!dependency.is_marked_as_subscribed());
-						assert(!dependency.is_marked_as_visited());
-
-						dependency::pop_marks();
-					}
-					assert(!dependency.is_marked_as_subscribed());
-					assert(dependency.is_marked_as_visited());
-
-					dependency.clear_marks();
-					assert(!dependency.is_marked_as_subscribed());
-					assert(!dependency.is_marked_as_visited());
-
-					dependency::pop_marks();
-				}
-
-				assert(dependency.is_marked_as_subscribed());
-				assert(!dependency.is_marked_as_visited());
+				assert(dependency.is_marked_as_visited());
 
 				dependency.clear_marks();
 				assert(!dependency.is_marked_as_subscribed());
@@ -69,8 +44,23 @@ namespace
 
 				dependency::pop_marks();
 			}
-		}
-	};
+			assert(!dependency.is_marked_as_subscribed());
+			assert(dependency.is_marked_as_visited());
 
-	test t;
+			dependency.clear_marks();
+			assert(!dependency.is_marked_as_subscribed());
+			assert(!dependency.is_marked_as_visited());
+
+			dependency::pop_marks();
+		}
+
+		assert(dependency.is_marked_as_subscribed());
+		assert(!dependency.is_marked_as_visited());
+
+		dependency.clear_marks();
+		assert(!dependency.is_marked_as_subscribed());
+		assert(!dependency.is_marked_as_visited());
+
+		dependency::pop_marks();
+	}
 }

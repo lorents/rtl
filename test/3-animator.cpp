@@ -3,20 +3,11 @@
 
 #include "test.h"
 
-using namespace rtl;
 
-namespace
+void rtl::tests::animator_test()
 {
-	class test : public rtl::test
+	animator anim([]() 
 	{
-		void run() override
-		{
-			animator anim([]() 
-			{
-				// something
-			});
-		}
-	};
-
-	test t;	
+		// something
+	});
 }

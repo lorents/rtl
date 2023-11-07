@@ -4,22 +4,12 @@
 
 #include "../test.h"
 
-using namespace rtl;
-
-namespace
+void rtl::tests::constant_test()
 {
-	class test : public rtl::test
-	{
-		void run() override
-		{
-			dependency dep;
-			constant<double> con(dep, 13.37);
-			assert_equals(con.value(), 13.37);
-			assert_equals(con.target(), 13.37);
-			assert(con.try_set(777));
-			assert_equals(con.value(), 777);
-		}
-	};
-
-	test t;
+	dependency dep;
+	constant<double> con(dep, 13.37);
+	assert_equals(con.value(), 13.37);
+	assert_equals(con.target(), 13.37);
+	assert(con.try_set(777));
+	assert_equals(con.value(), 777);
 }

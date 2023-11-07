@@ -13,36 +13,42 @@
 
 namespace rtl
 {
-	class test
+	class tests
 	{
-	public:
-		static std::unique_ptr<std::map<std::string, test*>> tests;
+		static void dependency_test();
+		static void dependant_test();
+		static void visitor_test();
+		static void animated_test();
+		static void constant_test();
+		static void delegate_test();
+		static void clock_test();
+		static void timer_test();
+		static void animator_test();
+		static void var_test();
+		static void vec_test();
+		static void list_test();
 
-		test(
-#ifdef RTL_USE_SOURCE_LOCATION
-			const std::source_location location = std::source_location::current()
-#endif
-		)
-		{
-			if (!tests) tests = std::make_unique<std::map<std::string, test*>>();
-#ifdef RTL_USE_SOURCE_LOCATION
-			(*tests)[location.file_name()] = this;
-#else
-			const void * address = static_cast<const void*>(this);
-			std::stringstream ss;
-			ss << address;
-			(*tests)[ss.str()] = this;
-#endif
-		}
-
-		virtual void run() {}
-
-		virtual ~test() = default;
-
-
-		void assert_equals(double lhs, double rhs)
+		static void assert_equals(double lhs, double rhs)
 		{
 			assert(std::abs(lhs - rhs) < 0.0001);
 		}
+	public:
+
+		static void run()
+		{
+			dependency_test();
+			dependant_test();
+			visitor_test();
+			animated_test();
+			constant_test();
+			delegate_test();
+			clock_test();
+			timer_test();
+			animator_test();
+			var_test();
+			vec_test();
+			list_test();
+		}
+
 	};
 }

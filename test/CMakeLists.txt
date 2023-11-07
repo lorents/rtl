@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8)
 
 project ("tezt")
 
@@ -17,6 +17,8 @@ add_executable(
 	"4-evaluators/constant.cpp" 
  	"4-evaluators/delegate.cpp"
 	"5-var.cpp"
+	"6-vec.cpp"
+	"7-list.cpp"
 	"test.cpp"
 	"main.cpp"  
  )
